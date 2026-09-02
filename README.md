@@ -27,8 +27,8 @@ Built progressively from **first principles** to production:
 
 ### 1. Clone & Setup Virtual Environment
 ```bash
-git clone https://github.com/MohitJain2003/ai-personal-research-assistant.git
-cd ai-personal-research-assistant
+git clone https://github.com/MohitJain2003/ai-research-decision-assistant.git
+cd ai-research-decision-assistant
 
 # Create and activate virtual environment (Python 3.12 recommended)
 py -3.12 -m venv .venv
