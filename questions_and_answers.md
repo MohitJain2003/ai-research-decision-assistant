@@ -75,13 +75,23 @@ LLMs generate tokens sequentially. If an answer takes 8 seconds to generate 500 
 - **Without Streaming:** The user stares at a blank screen for 8 seconds before the whole paragraph pops up (feels slow).
 - **With Streaming (Server-Sent Events / SSE):** The user sees words appearing immediately (Time To First Token / TTFT is ~200-400ms), giving an instant, responsive experience.
 
-### Q9: How does "Tool Calling" / "Function Calling" actually work? Does the LLM execute the Python code?
+### Q9: How does "Tool Calling" / "Function Calling" actually work?
 **Answer:**
-**No, the LLM does NOT execute code!** 
-The process works in 4 steps:
-1. **Tool Definition:** You define a function in Python (e.g., `calculate(expression)`) and give the LLM a JSON description (name, purpose, parameter types).
-2. **LLM Decision:** You send a user prompt like *"What is 45 * 892?"*. The LLM reads the tool description and decides: *"I shouldn't answer directly; I should call `calculate` with `expression='45 * 892'`"*.
-3. **Structured Response:** The LLM returns a structured JSON payload telling your application to run that function with those exact arguments.
-4. **Execution & Answer:** **Your Python program** executes the function locally, gets the result (`40140`), sends that result back to the LLM as context, and the LLM produces the final polite response: *"45 multiplied by 892 is 40,140."*
+1. **Tool Definition:** You write a regular Python function (e.g., `calculate_salary_growth(starting_lpa, rate, years)`).
+2. **Schema Extraction:** The SDK automatically inspects your Python function's name, type hints, and docstring, and turns them into a JSON Schema description.
+3. **Model Decision:** When given a prompt that requires math or data, the LLM stops text generation and returns a structured `FunctionCall` request asking your app to execute that function with specific arguments.
+4. **Local Execution:** Your Python app executes the function locally with the provided arguments.
+5. **Final Synthesis:** The output of your function is sent back to the LLM, which uses that ground truth data to formulate its final response.
+
+### Q10: Why are Python type annotations (`float`, `int`, `str`) and docstrings mandatory for tools?
+**Answer:**
+The LLM cannot see your Python function's internal code; it only sees the function **signature** and **docstring**!
+- **Docstring:** Teaches the AI **what** the tool does and **when** it should be chosen.
+- **Type Hints:** Ensure the AI sends arguments in the exact format required (e.g. sending `8.0` as a `float` rather than `"eight"` as a string).
+
+### Q11: What is Automatic Function Calling (AFC)?
+**Answer:**
+In traditional/manual function calling, you had to manually catch the model's tool call response, run your python function, create a `FunctionResponse` object, and send another request to the model.
+With **Automatic Function Calling (AFC)**, the modern SDK (like `google-genai`) orchestrates this loop for you: when the model requests a function, the SDK runs your local Python function automatically and feeds the result back to the model in a single seamless call.
 
 ---
