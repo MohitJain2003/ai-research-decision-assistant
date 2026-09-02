@@ -1,0 +1,10 @@
+# Core LLM SDKs
+google-genai>=1.0.0
+google-generativeai>=0.8.0
+
+# Environment & Config
+python-dotenv>=1.0.1
+pydantic>=2.7.0
+
+# Utilities
+requests>=2.31.0

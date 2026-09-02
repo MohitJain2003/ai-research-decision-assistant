@@ -1,0 +1,27 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Environment Variables & Secrets
+.env
+.env.local
+*.secret
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Data / Vector DB local stores (will be created in later phases)
+data/
+chroma_db/
+qdrant_storage/
+
+# IDE / System
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
