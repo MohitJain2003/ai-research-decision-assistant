@@ -37,15 +37,27 @@ Frameworks like LangChain and LangGraph are powerful, but if you start with them
 
 ## 📌 Milestone 1: LLM APIs, Client Calls & Tool Calling Mechanics
 
-### Q3: What happens under the hood during a standard LLM API call?
+### Q3: Why do we use an isolated virtual environment (`.venv`) for AI projects?
 **Answer:**
-When you send a prompt to an LLM provider (like Gemini or OpenAI):
-1. Your text is broken down into numerical tokens (sub-words).
-2. The tokens pass through the neural network transformer layers.
-3. The model predicts the next most probable token one by one (autoregression) until it hits a stop token or max length.
-4. The output tokens are decoded back into a text response and returned over HTTP.
+AI packages (like `google-genai`, `langchain`, `pydantic`, `torch`) evolve rapidly and have strict dependency constraints. If you install everything globally on your computer, library version conflicts will break your other projects. A virtual environment is a self-contained sandbox with its own Python interpreter and `site-packages` directory.
 
-### Q4: How does "Tool Calling" / "Function Calling" actually work? Does the LLM execute the Python code?
+### Q4: Why is `.gitignore` and `.env` separation crucial when working with AI APIs?
+**Answer:**
+- **The Danger:** LLM API keys have billing attached. If you accidentally commit a key to a public GitHub repository, automated bots scrape it within seconds and exhaust your credits.
+- **The Solution:** 
+  1. Store secrets locally in a `.env` file.
+  2. Add `.env` to `.gitignore` so Git ignores it.
+  3. Provide a `.env.example` file that shows the variable names without actual secrets, allowing collaborators to know what environment variables are needed.
+
+### Q5: What happens under the hood during a standard LLM API call?
+**Answer:**
+When you send a prompt to an LLM provider (like Gemini):
+1. **Tokenization:** Your text is converted into numerical tokens (sub-words).
+2. **Forward Pass:** The tokens pass through the neural network transformer layers.
+3. **Autoregression:** The model predicts the next most probable token one by one until it hits a stop token or reaches the max output token limit.
+4. **Decoding & Response:** The output tokens are decoded back into a text response and returned over an HTTP JSON response.
+
+### Q6: How does "Tool Calling" / "Function Calling" actually work? Does the LLM execute the Python code?
 **Answer:**
 **No, the LLM does NOT execute code!** 
 The process works in 4 steps:
@@ -55,5 +67,3 @@ The process works in 4 steps:
 4. **Execution & Answer:** **Your Python program** executes the function locally, gets the result (`40140`), sends that result back to the LLM as context, and the LLM produces the final polite response: *"45 multiplied by 892 is 40,140."*
 
 ---
-
-*(More questions and answers will be continuously added as we progress through each step!)*
