@@ -57,7 +57,25 @@ When you send a prompt to an LLM provider (like Gemini):
 3. **Autoregression:** The model predicts the next most probable token one by one until it hits a stop token or reaches the max output token limit.
 4. **Decoding & Response:** The output tokens are decoded back into a text response and returned over an HTTP JSON response.
 
-### Q6: How does "Tool Calling" / "Function Calling" actually work? Does the LLM execute the Python code?
+### Q6: What is `temperature` and how does it affect the model's output?
+**Answer:**
+`temperature` controls how the model samples the probability distribution of possible next tokens:
+- **Low temperature (0.0 to 0.3):** The model picks the highest-probability tokens (almost deterministic). Ideal for **analytical research, coding, math, fact-checking, and structured JSON output**.
+- **High temperature (0.7 to 1.0+):** Flattens the probabilities, giving less-frequent tokens a chance to be chosen. Ideal for **creative writing, brainstorming, and storytelling**.
+
+### Q7: What is `system_instruction` (System Prompt) and why is it distinct from the user prompt?
+**Answer:**
+- **System Instruction:** Sets the foundational personality, guidelines, constraints, and output format that persist throughout the interaction (e.g., *"You are an impartial decision analyst. Never make assumptions without evidence."*).
+- **User Prompt:** The dynamic, specific question or task provided at runtime (e.g., *"Compare IBPS PO vs Software Engineering"*).
+- Separating them gives the system prompt higher priority in steering model behavior.
+
+### Q8: What is Streaming (`generate_content_stream`) and why is it critical for user experience?
+**Answer:**
+LLMs generate tokens sequentially. If an answer takes 8 seconds to generate 500 words:
+- **Without Streaming:** The user stares at a blank screen for 8 seconds before the whole paragraph pops up (feels slow).
+- **With Streaming (Server-Sent Events / SSE):** The user sees words appearing immediately (Time To First Token / TTFT is ~200-400ms), giving an instant, responsive experience.
+
+### Q9: How does "Tool Calling" / "Function Calling" actually work? Does the LLM execute the Python code?
 **Answer:**
 **No, the LLM does NOT execute code!** 
 The process works in 4 steps:
