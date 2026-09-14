@@ -117,3 +117,22 @@ When slicing a document into chunks, a sentence or idea might get cut right down
 - **Sweet Spot:** Typically 200–500 words (or 500–1500 characters) with a 10–20% overlap.
 
 ---
+
+### Q15: What is a Vector Embedding and what does "768 dimensions" mean?
+**Answer:**
+- **Vector Embedding:** A list of numbers that captures the conceptual meaning, context, and tone of a piece of text.
+- **768 Dimensions:** In geometry, 2 dimensions represent an $(x, y)$ coordinate on a flat page, and 3 dimensions represent $(x, y, z)$ space. A 768-dimensional vector represents a coordinate in a 768-directional mathematical space where each direction measures subtle semantic features (e.g. "technicality", "formality", "job-relatedness", "emotion").
+
+### Q16: What is Cosine Similarity and how does it compare to Euclidean Distance?
+**Answer:**
+- **Cosine Similarity:** Measures the cosine of the angle between two vectors ($\cos \theta$).
+  - Value ranges from `-1.0` (opposite) to `1.0` (identical direction).
+  - It focuses on **direction (semantic topic)** rather than vector magnitude (length of text).
+- **Euclidean Distance:** Measures straight-line physical distance. It can be misleading if one chunk is very long and another is short even if they discuss the same topic. Therefore, **Cosine Similarity is the gold standard for RAG retrieval**.
+
+### Q17: How does an embedding find similar texts when they don't share any words?
+**Answer:**
+Traditional search (like `Ctrl + F`) only matches exact keywords. If you search *"physician"*, it won't find *"doctor"*.
+Embedding models are trained on billions of texts where words like *"physician"* and *"doctor"* appear in nearly identical contexts. The neural network positions them close to each other in vector space, allowing the AI to match by **meaning** rather than spelling.
+
+---
