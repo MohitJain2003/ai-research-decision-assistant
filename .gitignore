@@ -16,9 +16,12 @@ __pycache__/
 .pytest_cache/
 
 # Data / Vector DB local stores (will be created in later phases)
-data/
+data/chroma_db/
+data/qdrant_storage/
 chroma_db/
 qdrant_storage/
+*.db
+*.sqlite3
 
 # IDE / System
 .vscode/

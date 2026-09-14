@@ -95,3 +95,25 @@ In traditional/manual function calling, you had to manually catch the model's to
 With **Automatic Function Calling (AFC)**, the modern SDK (like `google-genai`) orchestrates this loop for you: when the model requests a function, the SDK runs your local Python function automatically and feeds the result back to the model in a single seamless call.
 
 ---
+
+## 📌 Milestone 2: First-Principles RAG (Chunking, Embeddings, Vector DBs)
+
+### Q12: Why is "Chunking" necessary in RAG? Why not pass the whole document?
+**Answer:**
+1. **Cost & Token Limits:** Large documents (hundreds of pages) exceed the prompt context limit or cost too much money to send on every question.
+2. **Signal-to-Noise Ratio ("Lost in the Middle"):** If you send 50 pages of text for a question about 1 specific salary number, the model can get distracted by irrelevant paragraphs and miss the exact fact.
+3. **Retrieval Precision:** Chunking enables our search algorithm to find the exact 2 or 3 sentences relevant to the question with high accuracy.
+
+### Q13: What is "Chunk Overlap" and why is it important?
+**Answer:**
+When slicing a document into chunks, a sentence or idea might get cut right down the middle (e.g. half of a sentence in Chunk 1 and the other half in Chunk 2).
+- **Without overlap (overlap = 0):** The meaning of border sentences is destroyed.
+- **With overlap (e.g. 50-100 characters):** The end of Chunk 1 is repeated at the start of Chunk 2. This guarantees that no thought is lost between chunk boundaries.
+
+### Q14: What are the trade-offs between small vs. large chunk sizes?
+**Answer:**
+- **Too Small (e.g. 50 characters):** Lacks sufficient context. The chunk might say *"it grew by 15%"*, but doesn't mention *what* grew (salary? vacancy? inflation?).
+- **Too Large (e.g. 3000+ characters):** Contains multiple different topics, diluting the semantic meaning and making vector similarity search less precise.
+- **Sweet Spot:** Typically 200–500 words (or 500–1500 characters) with a 10–20% overlap.
+
+---
